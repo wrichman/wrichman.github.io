@@ -148,11 +148,13 @@
         
         // DRAW CHART
         new Chartist.Bar('.ct-chart', {
-          labels: ['Weekly', 'Monthly', 'Quarterly', 'Annually'],
+          // labels: ['Weekly', 'Monthly', 'Quarterly', 'Annually'],
+          labels: ['Monthly', 'Annually'],
           series: [
-            [costWeekly, costMonthly, costQuarterly, costAnnually],
-            [timeWeekly, timeMonthly, timeQuarterly, timeAnnually],
-            [revenueWeekly, revenueMonthly, revenueQuarterly, revenueAnnually]
+            // [costWeekly, costMonthly, costQuarterly, costAnnually],
+            [costMonthly, costAnnually],
+            // [timeWeekly, timeMonthly, timeQuarterly, timeAnnually],
+            [revenueMonthly, revenueAnnually]
           ]
         }, {
           seriesBarDistance: 10,
@@ -203,7 +205,7 @@
         <h3><label for="inputEmail3" class="col-sm-offset-2 col-sm-3 control-label" style="margin-left: 19%;">Automate Task: </label></h3>
         <div class="col-sm-5">
           <select class="form-control input-lg" id="taskName" style="margin-bottom: 16px;height:30px"> 
-            <option value="">Manual Referral Program</option>
+            <option value="">Referral Program</option>
             <option value="">Schedule a Meeting</option>
             <option value="">Do Bookkeeping</option>
             <option value="">Conduct Research</option>
@@ -211,40 +213,16 @@
         </div>
       </div>
       <div class="col-sm-offset-2 col-sm-8">
-          <p>Imagine if you did not have to spend <strong>10 minutes</strong> processing each referral coupon code. Unlike other referral programs, ReferralCandy lets you automate the all parts of a referral program. The app then bills everyone accordingly. It is a great set-and-forget solution, especially if referral marketing could take up a good deal of time.</p>
-        </div>
+        <p>ReferralCandy lets you automate the all parts of a referral program. The app then bills everyone accordingly. It is a great set-and-forget solution, especially if referral marketing could take up a good deal of time.</p>
+      </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-offset-2 col-sm-4">
       <div class="col-sm-12" style="text-align:center">
         <h4 style="text-decoration: underline;">Predicted Cost</h4>
       </div>
       <form class="form-horizontal">
-        <!-- <div class="form-group">
-          <div class="col-sm-6 calc-input">
-            <div class="col-sm-5">
-              <label for="inputPassword3" class="control-label">Plan Type</label>
-            </div>
-            <div class="col-sm-7">
-              <select class="form-control input-md" id="minPerTask"> 
-                <option value="5">Small</option> 
-                <option value="10" selected="selected">Medium</option> 
-                <option value="15">Large</option> 
-                <option value="20">Enterprise</option> 
-              </select>  
-            </div>
-          </div>
-          <div class="col-sm-6 calc-input">
-            <div class="col-sm-6">
-              <label for="inputPassword3" class="control-label">Fixed Cost</label>
-            </div>
-            <div class="col-sm-6">
-              <h4 style="display:inline;">$</h4>
-              <input class="input-md form-control" id="annual-savings" type="text" placeholder="25" readonly>  
-            </div>
-          </div>
-        </div> -->
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-4 calc-input">
             <select class="form-control input-md"> 
@@ -258,7 +236,6 @@
             <div class="input-group">
               <div class="input-group-addon">$</div>
               <input type="text" class="form-control" id="monthlyReferralSalesVal" value="8500" readonly>
-              <!-- <div class="input-group-addon">.00</div> -->
             </div>
           </div>
           <label for="inputPassword3" class="col-sm-6 control-label">Incremental Monthly Referral Sales</label>
@@ -282,18 +259,14 @@
             <h4 style="display:inline">$</h4>
             <input class="input-lg form-control" id="annual-cost" type="text" placeholder="1,920" readonly>
           </div>
-          <label for="inputPassword3" class="col-sm-6 control-label">Annual Cost to Automate Task</label>
+          <label for="inputPassword3" class="col-sm-6 control-label">Annual Cost</label>
         </div>
       </form>
       <div class="row">
         <div class="col-sm-12">
           <div class="bs-example"> 
             <div class="color-swatches">
-              <!-- <div class="color-swatch brand-primary">
-                <h4>$<span id="hourly">1</span></h4>
-                <h6>Hourly</h6>
-              </div>  -->
-              <div class="color-swatch brand-info">
+              <div class="color-swatch brand-info" style="visibility:hidden">
                 <h4>$<span id="weeklyCost">40</span></h4>
                 <h6>Weekly</h6>
               </div> 
@@ -301,10 +274,10 @@
                 <h4>$<span id="monthlyCost">160</span></h4>
                 <h6>Monthly</h6>
               </div>
-              <div class="color-swatch brand-success">
+              <!-- <div class="color-swatch brand-success">
                 <h4>$<span id="quarterlyCost">480</span></h4>
                 <h6>Quarterly</h6>
-              </div> 
+              </div>  -->
               <div class="color-swatch brand-danger">
                 <h4>$<span id="annualCost">1,920</span></h4>
                 <h6>Annually</h6>
@@ -314,7 +287,7 @@
         </div>  
       </div> 
     </div>
-    <div class="col-sm-4">
+    <!-- <div class="col-sm-4">
       <div class="col-sm-12" style="text-align:center">
         <h4 style="text-decoration: underline;">Predicted Time Benefit</h4>
       </div>
@@ -326,7 +299,7 @@
               <input type="text" class="form-control" value="800">
             </div>
           </div>
-          <label for="inputPassword3" class="col-sm-6 control-label"><!-- Placeholder --></label>
+          <label for="inputPassword3" class="col-sm-6 control-label"> Placeholder </label>
         </div>
         <div class="form-group">
           <div class="col-sm-5 calc-input">
@@ -405,19 +378,14 @@
                 <h4>$<span id="timeAnnually">360</span></h4>
                 <h6>Annual Time</h6>
               </div> 
-
-              <!-- <div class="color-swatch brand-success">
-                <h4>$<span id="addRev">9,600</span></h4>
-                <h6>Annual Rev</h6>
-              </div>  -->
             </div>
           </div>
         </div>  
       </div> 
-    </div>
+    </div> -->
     <div class="col-sm-4">
       <div class="col-sm-12" style="text-align:center">
-        <h4 style="text-decoration: underline;">Predicted Revenue Benefit</h4>
+        <h4 style="text-decoration: underline;">Predicted Incremental Benefit</h4>
       </div>
       <form class="form-horizontal">
         <div class="form-group" style="visibility:hidden">
@@ -457,33 +425,19 @@
           </div>
           <label for="inputPassword3" class="col-sm-6 control-label">Sales Margin</label>
         </div>
-        <!-- <div class="form-group">
-          <div class="col-sm-4 calc-input">
-            <h4 style="display:inline"> </h4>
-            <select class="form-control input-sm" id="minPerTask"> 
-              <option value="5">5 minutes per coupon</option> 
-              <option value="10" selected="selected">10 minutes per coupon</option> 
-              <option value="15">15 minutes per coupon</option> 
-              <option value="20">20 minutes per coupon</option> 
-              <option value="25">25 minutes per coupon</option> 
-              <option value="30">30 minutes per coupon</option> 
-            </select>
-          </div>
-          <label for="inputPassword3" class="col-sm-6 control-label">Time saved by automating task (each time)</label>
-        </div> -->
         <div class="form-group">
           <div class="col-sm-6" style="text-align:right">
             <h4 style="display:inline">$</h4>
             <input class="input-lg form-control" id="annual-revenue-benefit" type="text" placeholder="1,920" readonly>
           </div>
-          <label for="inputPassword3" class="col-sm-6 control-label">Annual Revenue Benefit</label>
+          <label for="inputPassword3" class="col-sm-6 control-label">Annual Revenue</label>
         </div>
       </form>
       <div class="row">
         <div class="col-sm-12">
           <div class="bs-example"> 
             <div class="color-swatches">
-              <div class="color-swatch brand-info">
+              <div class="color-swatch brand-info" style="visibility:hidden">
                 <h4>$<span id="revenueWeekly">40</span></h4>
                 <h6>Weekly</h6>
               </div> 
@@ -491,13 +445,13 @@
                 <h4>$<span id="revenueMonthly">160</span></h4>
                 <h6>Monthly</h6>
               </div> 
-              <div class="color-swatch brand-primary">
+              <!-- <div class="color-swatch brand-primary">
                 <h4>$<span id="revenueQuarterly">480</span></h4>
                 <h6>Quarterly</h6>
-              </div>
+              </div> -->
               <div class="color-swatch brand-success">
                 <h4>$<span id="revenueAnnual">1,920</span></h4>
-                <h6>Annual Rev</h6>
+                <h6>Annually</h6>
               </div> 
             </div>
           </div>
