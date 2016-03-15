@@ -85,9 +85,10 @@
       console.log( "ready!" );
 
 
-      function drawInputs(){
+      function drawInputs(toolFixedCost, toolVariableCost){
         // COST
-        var monthlyCost = parseFloat($("#monthlyReferralSales").val()) * (parseFloat($("#variableCost").attr("placeholder"))/100) + parseFloat($("#fixedCost").attr("placeholder"))
+        // var monthlyCost = parseFloat($("#monthlyReferralSales").val()) * (parseFloat($("#variableCost").attr("placeholder"))/100) + parseFloat($("#fixedCost").attr("placeholder"))
+        var monthlyCost = parseFloat($("#monthlyReferralSales").val()) * (toolVariableCost / 100) + toolFixedCost
 
         // weeklyCost, monthlyCost, quarterlyCost, annualCost
         var costWeekly = monthlyCost / 4 
@@ -136,9 +137,9 @@
         // monthly referral sales
         $("#monthlyReferralSalesVal").val($("#monthlyReferralSales").val());
         // variable cost
-        // don't need to redraw yet
+        $("#variableCost").attr("placeholder", toolVariableCost);
         // fixed cost
-        // don't need to redraw yet
+        $("#fixedCost").attr("placeholder", toolFixedCost);
         // cost total
         $("#annual-cost").attr("placeholder", monthlyCost * 12);
         // time total
@@ -172,17 +173,38 @@
 
       }
 
-      drawInputs();
+      drawInputs(25, 7.5);
 
       // TIME ASSUMPTIONS CHANGE
       $("select").change(function() {
-        drawInputs();
+        drawInputs(25, 7.5);
       });
     
       // REV ASSUMPTIONS CHANGE
       $(".sales-projections").change(function() {
-        drawInputs();
-      });    
+        drawInputs(25, 7.5);
+      });
+
+      $("a#tool1" ).on("click", function( event ) {
+        event.preventDefault();
+        var toolFixedCost = 25;
+        var toolVariableCost = 7.5;
+        drawInputs(toolFixedCost, toolVariableCost);
+      });
+
+      $("a#tool2" ).on("click", function( event ) {
+        event.preventDefault();
+        var toolFixedCost = 200;
+        var toolVariableCost = 0;
+        drawInputs(toolFixedCost, toolVariableCost);
+      });
+
+      $("a#tool3" ).on("click", function( event ) {
+        event.preventDefault();
+        var toolFixedCost = 200;
+        var toolVariableCost = 0;
+        drawInputs(toolFixedCost, toolVariableCost);
+      });
 
   });
 
@@ -218,6 +240,36 @@
     </div>
   </div>
   <div class="row">
+    <div class="col-sm-offset-4 col-sm-4">
+      <div class="bs-example"> 
+        <div class="color-swatches">
+          <a href="#" id="tool1">
+            <div class="color-swatch brand-info">
+              <img src="https://pbs.twimg.com/profile_images/562155300682080256/z2oX67Ej.png" style="height:60px;width:60px">
+              <h6>Referral Candy</h6>
+            </div>
+          </a>
+          <a href="#" id="tool2">
+            <div class="color-swatch brand-warning">
+              <img src="https://pbs.twimg.com/media/CZiVv6wWQAA7Kg4.png" style="height:60px;width:60px">
+              <h6>Ambassador</h6>
+            </div>
+          </a>
+          <!-- <div class="color-swatch brand-success">
+            <h4>$<span id="quarterlyCost">480</span></h4>
+            <h6>Quarterly</h6>
+          </div>  -->
+          <a href="#" id="tool3">
+            <div class="color-swatch brand-danger">
+              <img src="https://pbs.twimg.com/profile_images/3592858536/7713828f5530734ef60fa4d6465e1acd_400x400.png" style="height:60px;width:60px">
+              <h6>Referral Saasquatch</h6>
+            </div> 
+          </a>
+        </div>
+      </div>
+    </div>  
+  </div> 
+  <div class="row">
     <div class="col-sm-offset-2 col-sm-4">
       <div class="col-sm-12" style="text-align:center">
         <h4 style="text-decoration: underline;">Predicted Cost</h4>
@@ -243,9 +295,9 @@
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-4 calc-input">
             <h4 style="display:inline">X</h4>
-            <input class="input-md form-control" id="variableCost" type="text" placeholder="7.5%" readonly>  
+            <input class="input-md form-control" id="variableCost" type="text" placeholder="7.5" readonly>  
           </div>
-          <label for="inputPassword3" class="col-sm-6 control-label">Monthly Variable Cost</label>
+          <label for="inputPassword3" class="col-sm-6 control-label">Percent of Referral Sales</label>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-4 calc-input" style="border-bottom: 1px solid rgb(0, 0, 0);padding-bottom: 10px;">
