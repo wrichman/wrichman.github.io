@@ -61,8 +61,21 @@
     margin-top: 15px;
 }
 
+.form-horizontal .control-label{
+  text-align: left;
+}
+
+.form-control {
+    display: inline;
+    width: 92%;
+}
+
 .ct-label{
   font-size: 20px;
+}
+
+.calc-input{
+  text-align: right;
 }
 
 </style>
@@ -79,92 +92,102 @@
         console.log(taskPerWeek)
         var dollarPerHour = $("#dollarPerHour option:selected").attr("value");
         console.log(dollarPerHour)
-        var percentCertainty = $("#percentCertainty option:selected").attr("value");
-        console.log(percentCertainty)
-        var dollarPerMonth = parseFloat(minPerTask) * parseFloat(taskPerWeek) * parseFloat(dollarPerHour) * parseFloat(percentCertainty);
+        var dollarPerMonth = (parseFloat(minPerTask) / 60) * (parseFloat(taskPerWeek) * 4) * parseFloat(dollarPerHour);
         console.log(dollarPerMonth)
 
 
-        var timeToUnderstand = $("#timeToUnderstand option:selected").attr("value");
-        var sunkCost = (timeToUnderstand / 60) * dollarPerHour
-        console.log(sunkCost)
-
 
         // alert( "Handler for .change() called." );
-        var hourBenefit = dollarPerMonth / 720;
+        var hourBenefit = (dollarPerMonth / 720).toFixed(2);
         $("#hourly").html(hourBenefit);
 
-        var dayBenefit = dollarPerMonth / 30;
+        var dayBenefit = (dollarPerMonth / 30).toFixed(0);
         $("#daily").html(dayBenefit);
 
-        var weekBenefit = dollarPerMonth / 4;
-        $("#weekly").html(dollarPerMonth / 4);
+        var weekBenefit = (dollarPerMonth / 4).toFixed(0);
+        $("#weekly").html(weekBenefit);
 
-        var monthBenefit = dollarPerMonth;
-        $("#monthly").html(dollarPerMonth);
+        var monthBenefit = dollarPerMonth.toFixed(0);
+        $("#monthly").html(monthBenefit);
 
-        var annualBenefit = dollarPerMonth * 12
-        $("#annually").html(dollarPerMonth * 12);
+        var annualBenefit = (dollarPerMonth * 12).toFixed(0)
+        $("#annually").html(annualBenefit);
+
+        $(".input-lg#annual-savings").attr("placeholder", annualBenefit);
 
         console.log([hourBenefit, dayBenefit, weekBenefit, monthBenefit, annualBenefit])
 
-
-            var chart = new Chartist.Line('.ct-chart', {
-              labels: ['Hour', 'Day', 'Week', 'Month', 'Year'],
-              series: [
-                [hourBenefit, dayBenefit, weekBenefit, monthBenefit, annualBenefit]
-                // [2, 3, 4, 8, 1, 2],
-                // [5, 4, 3, 2, 1, 0.5]
-              ]
-            }, {
-              low: 0,
-              showArea: true,
-              showPoint: false,
-              fullWidth: true
+        new Chartist.Bar('.ct-chart', {
+          labels: ['Hourly', 'Daily', 'Weekly', 'Monthly', 'Annually'],
+          series: [
+            [hourBenefit, dayBenefit, weekBenefit, monthBenefit, annualBenefit]
+          ]
+        }, {
+          stackBars: true,
+          axisY: {
+            labelInterpolationFnc: function(value) {
+              return '$' + value;
+            }
+          }
+        }).on('draw', function(data) {
+          if(data.type === 'bar') {
+            data.element.attr({
+              style: 'stroke-width: 30px'
             });
-
-            chart.on('draw', function(data) {
-              if(data.type === 'line' || data.type === 'area') {
-                data.element.animate({
-                  d: {
-                    begin: 2000 * data.index,
-                    dur: 2000,
-                    from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                    to: data.path.clone().stringify(),
-                    easing: Chartist.Svg.Easing.easeOutQuint
-                  }
-                });
-              }
-            });
+          }
+        });
       });
 
-      var chart = new Chartist.Line('.ct-chart', {
-              labels: ['Hour', 'Day', 'Week', 'Month', 'Year'],
-              series: [
-                
-                [1, 8, 40, 160, 1920]
-                // [5, 4, 3, 2, 1, 0.5]
-              ]
-            }, {
-              low: 0,
-              showArea: true,
-              showPoint: false,
-              fullWidth: true
-            });
+      var minPerTask = $("#minPerTask option:selected").attr("value");
+      console.log(minPerTask)
+      var taskPerWeek = $("#taskPerWeek option:selected").attr("value");
+      console.log(taskPerWeek)
+      var dollarPerHour = $("#dollarPerHour option:selected").attr("value");
+      console.log(dollarPerHour)
+      var dollarPerMonth = (parseFloat(minPerTask) / 60) * (parseFloat(taskPerWeek) * 4) * parseFloat(dollarPerHour);
+      console.log(dollarPerMonth)
 
-            chart.on('draw', function(data) {
-              if(data.type === 'line' || data.type === 'area') {
-                data.element.animate({
-                  d: {
-                    begin: 2000 * data.index,
-                    dur: 2000,
-                    from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                    to: data.path.clone().stringify(),
-                    easing: Chartist.Svg.Easing.easeOutQuint
-                  }
-                });
-              }
-            });
+
+
+      // alert( "Handler for .change() called." );
+      var hourBenefit = (dollarPerMonth / 720).toFixed(2);
+      $("#hourly").html(hourBenefit);
+
+      var dayBenefit = (dollarPerMonth / 30).toFixed(0);
+      $("#daily").html(dayBenefit);
+
+      var weekBenefit = (dollarPerMonth / 4).toFixed(0);
+      $("#weekly").html(weekBenefit);
+
+      var monthBenefit = dollarPerMonth.toFixed(0);
+      $("#monthly").html(monthBenefit);
+
+      var annualBenefit = (dollarPerMonth * 12).toFixed(0)
+      $("#annually").html(annualBenefit);
+
+      $(".input-lg#annual-savings").attr("placeholder", annualBenefit);
+
+      console.log([hourBenefit, dayBenefit, weekBenefit, monthBenefit, annualBenefit])
+
+      new Chartist.Bar('.ct-chart', {
+        labels: ['Hourly', 'Daily', 'Weekly', 'Monthly', 'Annually'],
+        series: [
+          [hourBenefit, dayBenefit, weekBenefit, monthBenefit, annualBenefit]
+        ]
+      }, {
+        stackBars: true,
+        axisY: {
+          labelInterpolationFnc: function(value) {
+            return '$' + value;
+          }
+        }
+      }).on('draw', function(data) {
+        if(data.type === 'bar') {
+          data.element.attr({
+            style: 'stroke-width: 30px'
+          });
+        }
+      });
     
   });
 
@@ -179,60 +202,62 @@
 
   <div class="row">
     <div class="col-sm-12" style="text-align:center">
-      <h1>Tulebox: Micro Automation</h1>
-      <h4>"<small>Small Changes</small>, <big>Big Difference</big>"</h4>
+      <h1>Tulebox: Referral Candy ROI</h1>
+      <h4>"<small>Small Changes</small>, <big>Big Differences</big>"</h4>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
       <form class="form-horizontal">
         <div class="form-group">
-          <label for="inputEmail3" class="col-sm-6 control-label">Job To Be Done<br> (task name)</label>
-          <div class="col-sm-6">
-            <!-- <input type="email" class="form-control" id="inputEmail3" placeholder="Book a Meeting"> -->
+          <h3><label for="inputEmail3" class="col-sm-offset-2 col-sm-3 control-label" style="margin-left: 19%;">Automated Task: </label></h3>
+          <div class="col-sm-5">
             <select class="form-control input-lg" id="taskName"> 
+              <option value="">Manual Referral Program</option>
               <option value="">Schedule a Meeting</option>
               <option value="">Do Bookkeeping</option>
               <option value="">Conduct Research</option>
             </select>
           </div>
         </div>
+        <div class="col-sm-offset-2 col-sm-8">
+          <p>Imagine if you did not have to spend <strong>10 minutes</strong> processing each referral coupon code. Unlike other referral programs, ReferralCandy lets you automate the all parts of a referral program. The app then bills everyone accordingly. It is a great set-and-forget solution, especially if referral marketing could take up a good deal of time.</p>
+        </div>
         <div class="form-group">
-          <label for="inputPassword3" class="col-sm-6 control-label">Minutes Per Task</label>
-          <div class="col-sm-6">
-            <!-- <input type="text" class="form-control" id="inputPassword3" placeholder="20 minutes per meeting"> -->
+          <div class="col-sm-offset-2 col-sm-3 calc-input">
+            <h4 style="display:inline"> </h4>
             <select class="form-control input-lg" id="minPerTask"> 
-              <option value="5">5 minutes per booking</option> 
-              <option value="10" selected="selected">10 minutes per booking</option> 
-              <option value="15">15 minutes per booking</option> 
-              <option value="20">20 minutes per booking</option> 
-              <option value="25">25 minutes per booking</option> 
-              <option value="30">30 minutes per booking</option> 
+              <option value="5">5 minutes per coupon</option> 
+              <option value="10" selected="selected">10 minutes per coupon</option> 
+              <option value="15">15 minutes per coupon</option> 
+              <option value="20">20 minutes per coupon</option> 
+              <option value="25">25 minutes per coupon</option> 
+              <option value="30">30 minutes per coupon</option> 
             </select>
           </div>
+          <label for="inputPassword3" class="col-sm-6 control-label">Time saved by automating task (each time)</label>
         </div>
         <div class="form-group">
-          <label for="inputPassword3" class="col-sm-6 control-label">Tasks Per Week</label>
-          <div class="col-sm-6">
-            <!-- <input type="text" class="form-control" id="inputPassword3" placeholder="5 meetings per week"> -->
+          <div class="col-sm-offset-2 col-sm-3 calc-input">
+            <h4 style="display:inline">X</h4>
             <select class="form-control input-lg" id="taskPerWeek"> 
-              <option value="1">1 meetings per week</option> 
-              <option value="2">2 meetings per week</option> 
-              <option value="3" selected="selected">3 meetings per week</option> 
-              <option value="4">4 meetings per week</option> 
-              <option value="5">5 meetings per week</option>
-              <option value="6">6 meetings per week</option>
-              <option value="7">7 meetings per week</option>
-              <option value="8">9 meetings per week</option>
-              <option value="9">9 meetings per week</option>
-              <option value="10">10 meetings per week</option>
+              <option value="1">1 coupon per week</option> 
+              <option value="2">2 coupons per week</option> 
+              <option value="3" selected="selected">3 coupons per week</option> 
+              <option value="4">4 coupons per week</option> 
+              <option value="5">5 coupons per week</option>
+              <option value="6">6 coupons per week</option>
+              <option value="7">7 coupons per week</option>
+              <option value="8">9 coupons per week</option>
+              <option value="9">9 coupons per week</option>
+              <option value="10">10 coupons per week</option>
             </select>
           </div>
+          <label for="inputPassword3" class="col-sm-6 control-label">Number of times the task is usually completed</label>
         </div>
         <div class="form-group">
-          <label for="inputPassword3" class="col-sm-6 control-label">Dollars Per Hour</label>
-          <div class="col-sm-6">
-            <!-- <input type="text" class="form-control" id="inputPassword3" placeholder="$12 per hour"> -->
+          <div class="col-sm-offset-2 col-sm-3 calc-input" style="border-bottom: 1px solid rgb(0, 0, 0);padding-bottom: 10px;">
+            <h4 style="display:inline">X</h4>
             <select class="form-control input-lg" id="dollarPerHour"> 
               <option value="8">$8 per hour</option> 
               <option value="9" selected="selected">$9 per hour</option> 
@@ -245,11 +270,35 @@
               <option value="16">$16 per hour</option> 
             </select>
           </div>
+          <label for="inputPassword3" class="col-sm-6 control-label">Is what I usually pay to someone who completes the task</label>
         </div>
         <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-3" style="text-align:right">
+            <h4 style="display:inline">$</h4>
+            <input class="input-lg form-control" id="annual-savings" type="text" placeholder="1,920" readonly>
+          </div>
+          <label for="inputPassword3" class="col-sm-6 control-label">Annual Savings from Automating Task</label>
+        </div>
+
+
+        <!-- <div class="col-sm-4" style="text-align: center;">
+          <h4 style="padding: 0px;margin:0px">Action</h4>
+        </div>
+        <div class="col-sm-8">
+          <div class="form-group">
+            <button id="share" class="btn btn-default btn-primary">Share</button>
+            <button id="save" class="btn btn-default btn-success">Save</button>
+            <button id="calculate" class="btn btn-default btn-info">Calculate</button>
+            <button id="automate" class="btn btn-default btn-danger">Automate</button>
+          </div>
+        </div> -->
+
+
+
+
+        <!-- <div class="form-group">
           <label for="inputPassword3" class="col-sm-6 control-label">Degree of Certainty</label>
           <div class="col-sm-6">
-            <!-- <input type="text" class="form-control" id="inputPassword3" placeholder="90%"> -->
             <select class="form-control input-lg" id="percentCertainty"> 
               <option value="0.4">40% certainty</option> 
               <option value="0.5">50% certainty</option> 
@@ -264,7 +313,6 @@
         <div class="form-group">
           <label for="inputPassword3" class="col-sm-6 control-label">Time to Understand</label>
           <div class="col-sm-6">
-            <!-- <input type="text" class="form-control" id="inputPassword3" placeholder="90%"> -->
             <select class="form-control input-lg" id="timeToUnderstand"> 
               <option value="10">10 minutes</option> 
               <option value="20">20 minutes</option> 
@@ -274,20 +322,9 @@
               <option value="60">60 minutes</option> 
             </select>
           </div>
-        </div>
-        <div class="col-sm-12" style="text-align: center;">
-          <h4 style="padding: 0px;margin:0px">Action</h4>
-        </div>
-        <div class="col-sm-12">
-          <div class="form-group">
-            <button id="share" class="btn btn-default btn-primary">Share</button>
-            <button id="save" class="btn btn-default btn-success">Save</button>
-            <button id="calculate" class="btn btn-default btn-info">Calculate</button>
-            <button id="automate" class="btn btn-default btn-danger">Automate</button>
-          </div>
-        </div>
+        </div> -->
 
-        <div class="col-sm-12" style="text-align: center;">
+        <!-- <div class="col-sm-12" style="text-align: center;">
           <h4>Recommended Tools</h4>
         </div>
         <div class="col-sm-12">
@@ -336,66 +373,56 @@
               </div> 
             </div>
           </div>
-        </div> 
+        </div>  -->
       </form>
     </div>
-    <div class="col-sm-8">
-      <div class="row">
-        <div class="col-sm-2">
-          <!-- <h3 style="-webkit-transform: rotate(-90deg);margin-top: 160px;margin-left: 105px;">Dollars Saved</h3> -->
-        </div>  
-        <div class="col-sm-10" style="text-align:center">
-          <!-- <h4>Dollars Saved</h3> -->
-          <div class="box">
-            <div class="ct-chart ct-perfect-fourth"></div>  
-          </div>  
-        </div>
+  </div>
+  <div class="row">
+    <div class="row">
+      <div class="col-sm-12" style="text-align:center">
+        <h4>Predicted Benefit</h4>
       </div>
-      <div class="row">
-        <div class="col-sm-12" style="text-align:center">
-          <h4>Predicted Benefit</h4>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-offset-3 col-sm-8">
-          <div class="bs-example"> 
-            <div class="color-swatches">
-              <div class="color-swatch brand-primary">
-                <h4>$<span id="hourly">1</span></h4>
-                <h6>Hourly</h6>
-              </div> 
-              <div class="color-swatch brand-success">
-                <h4>$<span id="daily">8</span></h4>
-                <h6>Daily</h6>
-              </div> 
-              <div class="color-swatch brand-info">
-                <h4>$<span id="weekly">40</span></h4>
-                <h6>Weekly</h6>
-              </div> 
-              <div class="color-swatch brand-warning">
-                <h4>$<span id="monthly">160</span></h4>
-                <h6>Monthly</h6>
-              </div> 
-              <div class="color-swatch brand-danger">
-                <h4>$<span id="annually">1,920</span></h4>
-                <h6>Annually</h6>
-              </div> 
-            </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-offset-3 col-sm-8" style="margin-left: 30.333333%;">
+        <div class="bs-example"> 
+          <div class="color-swatches">
+            <div class="color-swatch brand-primary">
+              <h4>$<span id="hourly">1</span></h4>
+              <h6>Hourly</h6>
+            </div> 
+            <div class="color-swatch brand-success">
+              <h4>$<span id="daily">8</span></h4>
+              <h6>Daily</h6>
+            </div> 
+            <div class="color-swatch brand-info">
+              <h4>$<span id="weekly">40</span></h4>
+              <h6>Weekly</h6>
+            </div> 
+            <div class="color-swatch brand-warning">
+              <h4>$<span id="monthly">160</span></h4>
+              <h6>Monthly</h6>
+            </div> 
+            <div class="color-swatch brand-danger">
+              <h4>$<span id="annually">1,920</span></h4>
+              <h6>Annually</h6>
+            </div> 
           </div>
-        </div>  
+        </div>
       </div>  
+    </div> 
+    <div class="row">
+      <div class="col-sm-3">
+        <h3 style="-webkit-transform: rotate(-90deg);margin-top: 160px;margin-left: 105px;">Dollars Saved</h3>
+      </div>  
+      <div class="col-sm-9" style="text-align:center">
+        <!-- <h4>Dollars Saved</h3> -->
+        <div class="box" style="width:550px">
+          <div class="ct-chart ct-perfect-fourth"></div>  
+        </div>  
+      </div>
     </div>
   </div>
-    
-
-
-    
-  <!-- <div class="row">
-    <div class="col-sm-5" style="text-align:center">
-      <h4>Private Cloud Rocking Bed</h4>
-      <img src="https://thingd-media-ec5.thefancy.com/default/296294317_ecf10056d484.jpg" style="height:300px">
-    </div>
-  </div> -->
   
 
 
