@@ -105,14 +105,18 @@
 
         var weekBenefit = (dollarPerMonth / 4).toFixed(0);
         $("#weekly").html(weekBenefit);
+        $("#timeWeekly").html(annualBenefit);
 
         var monthBenefit = dollarPerMonth.toFixed(0);
         $("#monthly").html(monthBenefit);
+        $("#timeMonthly").html(annualBenefit);
 
         var annualBenefit = (dollarPerMonth * 12).toFixed(0)
         $("#annually").html(annualBenefit);
+        $("#timeQuarterly").html(annualBenefit);
 
         $(".input-lg#annual-savings").attr("placeholder", annualBenefit);
+        $("#timeAnnually").html(annualBenefit);
 
         console.log([hourBenefit, dayBenefit, weekBenefit, monthBenefit, annualBenefit])
 
@@ -189,20 +193,71 @@
         }
       });
 
-
       var monthlyCost = parseFloat($("#monthlyReferralSalesVal").val()) * (parseFloat($("#variableCost").attr("placeholder"))/100) + parseFloat($("#fixedCost").attr("placeholder"))
 
       $("#annual-cost").attr("placeholder", monthlyCost);
 
       $("#monthlyCost").html(monthlyCost);
+      $("#quarterlyCost").html(monthlyCost * 3);
       $("#annualCost").html(monthlyCost * 12);
+    
+
+
+
+      // PREDICTED REVENUE
+      var annualRev = parseFloat($("#monthlyReferralSales").val() * 12) * parseFloat($("#salesMargin").val() / 100)
+      $("#annual-revenue-benefit").val(annualRev);
+      $("#monthlyReferralSalesVal").val($("#monthlyReferralSales").val());
+      $("#revenueAnnual").html(annualRev);
+
+
 
       $("#monthlyReferralSales").change(function() {
+        // PREDICTED COST
         var monthlyCost = parseFloat($("#monthlyReferralSales").val()) * (parseFloat($("#variableCost").attr("placeholder"))/100) + parseFloat($("#fixedCost").attr("placeholder"))
 
         $("#annual-cost").attr("placeholder", monthlyCost * 12);
-      })
-    
+
+        var timeWeek = parseFloat($("#weeklyCost").html(monthlyCost / 4));
+        var timeMonth = parseFloat($("#monthlyCost").html(monthlyCost));
+        var timeQuarter = parseFloat($("#quarterlyCost").html(monthlyCost * 3));
+        var timeAnnual = parseFloat($("#annualCost").html(monthlyCost * 12));
+
+        // PREDICTED REVENUE
+        var annualRev = parseFloat($("#monthlyReferralSales").val() * 12) * parseFloat($("#salesMargin").val() / 100)
+        $("#annual-revenue-benefit").val(annualRev);
+        $("#monthlyReferralSalesVal").val($("#monthlyReferralSales").val());
+
+        $("#revenueWeekly").html(annualRev / 52);
+        $("#revenueMonthly").html(annualRev / 12);
+        $("#revenueQuarterly").html(annualRev / 3);
+        $("#revenueAnnual").html(annualRev);
+
+
+        new Chartist.Bar('.ct-chart', {
+          labels: ['Weekly', 'Monthly', 'Quarterly', 'Annually'],
+          series: [
+            [timeWeek, timeMonth, timeQuarter, timeAnnual],
+            // [weekBenefit * 3, monthBenefit * 3, (monthBenefit * 3) * 3, annualBenefit * 3],
+            // [weekBenefit * 4, monthBenefit * 4, monthBenefit * 3 * 4, annualBenefit * 4]
+          ]
+        }, {
+          seriesBarDistance: 10,
+          axisX: {
+            offset: 60
+          },
+          axisY: {
+            offset: 80,
+            labelInterpolationFnc: function(value) {
+              return value + ''
+            },
+            scaleMinSpace: 15
+          }
+        });
+
+
+      });
+
   });
 
 
@@ -323,7 +378,7 @@
                 <h6>Hourly</h6>
               </div>  -->
               <div class="color-swatch brand-info">
-                <h4>$<span id="weekly">40</span></h4>
+                <h4>$<span id="weeklyCost">40</span></h4>
                 <h6>Weekly</h6>
               </div> 
               <div class="color-swatch brand-warning">
@@ -331,7 +386,7 @@
                 <h6>Monthly</h6>
               </div>
               <div class="color-swatch brand-success">
-                <h4>$<span id="daily">480</span></h4>
+                <h4>$<span id="quarterlyCost">480</span></h4>
                 <h6>Quarterly</h6>
               </div> 
               <div class="color-swatch brand-danger">
@@ -352,22 +407,22 @@
           <div class="col-sm-4 calc-input">
             <div class="input-group">
               <div class="input-group-addon">$</div>
-              <input type="text" class="form-control" id="monthlyReferralSalesVal" value="800">
+              <input type="text" class="form-control" value="800">
             </div>
           </div>
-          <label for="inputPassword3" class="col-sm-6 control-label">Monthly Referral Sales</label>
+          <label for="inputPassword3" class="col-sm-6 control-label"><!-- Placeholder --></label>
         </div>
         <div class="form-group" style="visibility:hidden">
           <div class="col-sm-4 calc-input">
             <div class="input-group">
               <div class="input-group-addon">%</div>
-              <input type="text" class="form-control" id="monthlyReferralSalesVal" value="20">
+              <input type="text" class="form-control" value="25">
             </div>
           </div>
-          <label for="inputPassword3" class="col-sm-6 control-label">Sales Margin</label>
+          <label for="inputPassword3" class="col-sm-6 control-label"><!-- Sales Margin --></label>
         </div>
         <div class="form-group">
-          <div class="col-sm-4 calc-input">
+          <div class="col-sm-5 calc-input">
             <h4 style="display:inline"> </h4>
             <select class="form-control input-md" id="minPerTask"> 
               <option value="5">5 minutes per coupon</option> 
@@ -378,10 +433,10 @@
               <option value="30">30 minutes per coupon</option> 
             </select>
           </div>
-          <label for="inputPassword3" class="col-sm-8 control-label">Time saved by automation</label>
+          <label for="inputPassword3" class="col-sm-7 control-label">Time saved by automation</label>
         </div>
         <div class="form-group">
-          <div class="col-sm-4 calc-input">
+          <div class="col-sm-5 calc-input">
             <h4 style="display:inline">X</h4>
             <select class="form-control input-md" id="taskPerMonth"> 
               <option value="5">5 coupon per month</option> 
@@ -396,10 +451,10 @@
               <option value="100">10 coupons per month</option>
             </select>
           </div>
-          <label for="inputPassword3" class="col-sm-8 control-label"># of completed tasks</label>
+          <label for="inputPassword3" class="col-sm-7 control-label"># of completed tasks</label>
         </div>
         <div class="form-group">
-          <div class="col-sm-4 calc-input" style="border-bottom: 1px solid rgb(0, 0, 0);padding-bottom: 10px;">
+          <div class="col-sm-5 calc-input" style="border-bottom: 1px solid rgb(0, 0, 0);padding-bottom: 10px;">
             <h4 style="display:inline">X</h4>
             <select class="form-control input-md" id="dollarPerHour"> 
               <option value="8">$8 per hour</option> 
@@ -413,7 +468,7 @@
               <option value="16">$16 per hour</option> 
             </select>
           </div>
-          <label for="inputPassword3" class="col-sm-8 control-label">Employee Wage</label>
+          <label for="inputPassword3" class="col-sm-7 control-label">Employee Wage</label>
         </div>
         <div class="form-group">
           <div class="col-sm-4" style="text-align:right">
@@ -428,19 +483,19 @@
           <div class="bs-example"> 
             <div class="color-swatches">
               <div class="color-swatch brand-info">
-                <h4>$<span id="weekly">40</span></h4>
+                <h4>$<span id="timeWeekly">7.5</span></h4>
                 <h6>Weekly</h6>
               </div> 
               <div class="color-swatch brand-primary">
-                <h4>$<span id="monthly">160</span></h4>
+                <h4>$<span id="timeMonthly">30</span></h4>
                 <h6>Monthly</h6>
               </div> 
               <div class="color-swatch brand-primary">
-                <h4>$<span id="quarterly">480</span></h4>
+                <h4>$<span id="timeQuarterly">90</span></h4>
                 <h6>Quarterly</h6>
               </div> 
               <div class="color-swatch brand-success">
-                <h4>$<span id="annually">1,920</span></h4>
+                <h4>$<span id="timeAnnually">360</span></h4>
                 <h6>Annual Time</h6>
               </div> 
 
@@ -494,20 +549,20 @@
           <label for="inputPassword3" class="col-sm-8 control-label">Employee Wage</label>
         </div>
         <div class="form-group">
-          <div class="col-sm-4 calc-input">
+          <div class="col-sm-6 calc-input">
             <div class="input-group">
               <div class="input-group-addon">$</div>
-              <input type="text" class="form-control" id="monthlyReferralSalesVal" value="800">
+              <input type="text" class="form-control" id="monthlyReferralSales" value="8500">
               <!-- <div class="input-group-addon">.00</div> -->
             </div>
           </div>
           <label for="inputPassword3" class="col-sm-6 control-label">Monthly Referral Sales</label>
         </div>
         <div class="form-group">
-          <div class="col-sm-4 calc-input" style="border-bottom:1px solid black;padding-bottom:10px">
+          <div class="col-sm-6 calc-input" style="border-bottom:1px solid black;padding-bottom:10px">
             <div class="input-group">
               <div class="input-group-addon">%</div>
-              <input type="text" class="form-control" id="monthlyReferralSalesVal" value="20">
+              <input type="text" class="form-control" id="salesMargin" value="25">
             </div>
           </div>
           <label for="inputPassword3" class="col-sm-6 control-label">Sales Margin</label>
@@ -527,11 +582,11 @@
           <label for="inputPassword3" class="col-sm-6 control-label">Time saved by automating task (each time)</label>
         </div> -->
         <div class="form-group">
-          <div class="col-sm-4" style="text-align:right">
+          <div class="col-sm-6" style="text-align:right">
             <h4 style="display:inline">$</h4>
             <input class="input-lg form-control" id="annual-revenue-benefit" type="text" placeholder="1,920" readonly>
           </div>
-          <label for="inputPassword3" class="col-sm-8 control-label">Annual Revenue Benefit</label>
+          <label for="inputPassword3" class="col-sm-6 control-label">Annual Revenue Benefit</label>
         </div>
       </form>
       <div class="row">
@@ -539,24 +594,19 @@
           <div class="bs-example"> 
             <div class="color-swatches">
               <div class="color-swatch brand-info">
-                <h4>$<span id="weekly">40</span></h4>
+                <h4>$<span id="revenueWeekly">40</span></h4>
                 <h6>Weekly</h6>
               </div> 
               <div class="color-swatch brand-primary">
-                <h4>$<span id="monthly">160</span></h4>
+                <h4>$<span id="revenueMonthly">160</span></h4>
                 <h6>Monthly</h6>
               </div> 
               <div class="color-swatch brand-primary">
-                <h4>$<span id="quarterly">480</span></h4>
+                <h4>$<span id="revenueQuarterly">480</span></h4>
                 <h6>Quarterly</h6>
-              </div> 
-              <!-- <div class="color-swatch brand-success">
-                <h4>$<span id="annually">1,920</span></h4>
-                <h6>Annual Time</h6>
-              </div>  -->
-
+              </div>
               <div class="color-swatch brand-success">
-                <h4>$<span id="addRev">1,920</span></h4>
+                <h4>$<span id="revenueAnnual">1,920</span></h4>
                 <h6>Annual Rev</h6>
               </div> 
             </div>
